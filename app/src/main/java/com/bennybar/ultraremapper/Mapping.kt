@@ -13,6 +13,7 @@ object Mapping {
 
     val actions = listOf(
         "none" to "Nothing",
+        "original" to "Original (Samsung)",
         "play_pause" to "Play / pause",
         "next" to "Next track",
         "previous" to "Previous track",
@@ -34,6 +35,13 @@ object Mapping {
 
     fun set(context: Context, gesture: String, action: String) =
         prefs(context).edit().putString(gesture, action).apply()
+
+    /** Apps in which the bottom button is left completely to the system (e.g. Samsung Health workouts). */
+    fun passThroughApps(context: Context): Set<String> =
+        prefs(context).getStringSet("passthrough", setOf("com.samsung.android.wear.shealth"))!!.toSet()
+
+    fun setPassThroughApps(context: Context, apps: Set<String>) =
+        prefs(context).edit().putStringSet("passthrough", apps).apply()
 
     fun label(context: Context, action: String): String {
         if (!action.startsWith("app:")) return actions.toMap()[action] ?: action

@@ -1,6 +1,7 @@
 package com.bennybar.ultraremapper
 
 import android.app.Service
+import android.content.ComponentName
 import android.content.Intent
 import android.os.IBinder
 
@@ -17,10 +18,24 @@ class ActionButtonService : Service() {
             5 -> if (intent.getIntExtra("ACTION_KEY_COUNT", 0) == 2) "double" else null
             else -> null
         }
-        if (gesture != null) Mapping.perform(this, gesture)
+        if (gesture != null) {
+            if (Mapping.get(this, gesture) == "original") {
+                // Hand the event to Samsung's handler exactly as the system would have.
+                startService(Intent(intent).setComponent(SAMSUNG_HANDLER))
+            } else {
+                Mapping.perform(this, gesture)
+            }
+        }
         stopSelf(startId)
         return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
+
+    companion object {
+        val SAMSUNG_HANDLER = ComponentName(
+            "com.samsung.android.wear.shealth",
+            "com.samsung.android.wear.shealth.service.ActionButtonService",
+        )
+    }
 }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Key events only: no accessibility event types are subscribed, so it never wakes for screen changes. -->
+<!-- Key events only: no accessibility event types are subscribed, so it never wakes for screen changes.
+     canRetrieveWindowContent lets it look up the app on screen when the button is pressed (pass-through apps). -->
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:accessibilityFlags="flagRequestFilterKeyEvents"
     android:canRequestFilterKeyEvents="true"
+    android:canRetrieveWindowContent="true"
     android:description="@string/bottom_service_description" />
